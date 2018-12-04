@@ -51,7 +51,7 @@ namespace MySpireOffice2
                 sheet.Range["A1:G1"].Style.HorizontalAlignment = HorizontalAlignType.Center;
 
                 int index = 0;
-                foreach (var p in family.people.OrderBy(item => item.birthday).OrderBy(item => item.isHost))
+                foreach (var p in family.people.OrderBy(item => item.birthday).OrderByDescending(item => item.isHost))
                 {
                     sheet.Range[string.Format("A{0}:A{1}", (index * 4) + 2, (index * 4) + 5)].Merge();
                     sheet.Range[string.Format("A{0}:A{1}", (index * 4) + 2, (index * 4) + 5)].Text = p.isHost ? "户主情况" : "家庭人员";
@@ -134,6 +134,10 @@ namespace MySpireOffice2
                 {
                     continue;
                 }
+                if (sheet[r, 5].Value.Trim() == "")
+                {
+                    continue;
+                }
 
                 //if (hostNo.Length > 5)
                 //{
@@ -146,14 +150,22 @@ namespace MySpireOffice2
 
                 if (this.lastHostName != hostName)
                 {
-                    family = new Family()
+                    if (this.dicFamilies.ContainsKey(hostName))
                     {
-                        hostNo = hostNo,
-                        hostHostName = hostName
-                    };
+                        family = this.dicFamilies[hostName];
+                    }
+                    else
+                    {
+                        family = new Family()
+                        {
+                            hostNo = hostNo,
+                            hostHostName = hostName
+                        };
+
+                        this.dicFamilies.Add(hostName, family);
+                    }
 
                     this.lastHostName = hostName;
-                    this.dicFamilies.Add(hostName, family);
                 }
 
                 Person p = new Person()
