@@ -15,6 +15,7 @@ namespace MySpireOffice2
     {
         string hostNoPrefix = "2302815900";
         Dictionary<string, Family> dicFamilies = new Dictionary<string, Family>();
+        string lastHostName = "";
 
         public Form1()
         {
@@ -33,14 +34,14 @@ namespace MySpireOffice2
 
         private void btnBuildTable4_Click(object sender, EventArgs e)
         {
-            foreach (var item in dicFamilies)
+            foreach (var family in dicFamilies.Values)
             {
                 Workbook book = new Workbook();
 
                 Worksheet sheet = book.Worksheets[0];
                 sheet.DefaultRowHeight = 27;
 
-                sheet.Name = item.Key;
+                sheet.Name = family.hostHostName;
                 sheet.Range["A1:G1"].Merge();
                 sheet.Range["A1:G1"].Text = "村确认家庭人口调查表  （户口薄）";
                 sheet.Range["A1:G1"].Style.Font.IsBold = true;
@@ -49,36 +50,36 @@ namespace MySpireOffice2
                 sheet.Range["A1:G1"].Style.VerticalAlignment = VerticalAlignType.Center;
                 sheet.Range["A1:G1"].Style.HorizontalAlignment = HorizontalAlignType.Center;
 
-                //for (int i = 0; i < item.Value.Count; i++)
-                //{
-                //    Person p = item.Value[i];
-                //    sheet.Range[string.Format("A{0}:A{1}", (i * 4) + 2, (i * 4) + 5)].Merge();
-                //    sheet.Range[string.Format("A{0}:A{1}", (i * 4) + 2, (i * 4) + 5)].Text = p.isHost ? "户主情况" : "家庭人员";
-                //    sheet.Range[string.Format("B{0}", (i * 4) + 2)].Text = "姓名";
-                //    sheet.Range[string.Format("C{0}", (i * 4) + 2)].Text = p.isHost ? p.hostName : p.name;
-                //    sheet.Range[string.Format("D{0}", (i * 4) + 2)].Text = "性别";
-                //    sheet.Range[string.Format("E{0}", (i * 4) + 2)].Text = p.sex;
-                //    sheet.Range[string.Format("F{0}", (i * 4) + 2)].Text = p.isHost ? "户编号" : "与户主关系";
-                //    sheet.Range[string.Format("G{0}", (i * 4) + 2)].Text = p.isHost ? "" : p.relation;
+                int index = 0;
+                foreach (var p in family.people.OrderBy(item => item.birthday).OrderBy(item => item.isHost))
+                {
+                    sheet.Range[string.Format("A{0}:A{1}", (index * 4) + 2, (index * 4) + 5)].Merge();
+                    sheet.Range[string.Format("A{0}:A{1}", (index * 4) + 2, (index * 4) + 5)].Text = p.isHost ? "户主情况" : "家庭人员";
+                    sheet.Range[string.Format("B{0}", (index * 4) + 2)].Text = "姓名";
+                    sheet.Range[string.Format("C{0}", (index * 4) + 2)].Text = p.isHost ? p.hostName : p.name;
+                    sheet.Range[string.Format("D{0}", (index * 4) + 2)].Text = "性别";
+                    sheet.Range[string.Format("E{0}", (index * 4) + 2)].Text = p.sex;
+                    sheet.Range[string.Format("F{0}", (index * 4) + 2)].Text = p.isHost ? "户编号" : "与户主关系";
+                    sheet.Range[string.Format("G{0}", (index * 4) + 2)].Text = p.isHost ? family.hostNo : p.relation;
 
-                //    sheet.Range[string.Format("B{0}", (i * 4) + 3)].Text = "身份证号";
-                //    sheet.Range[string.Format("C{0}:E{1}", (i * 4) + 3, (i * 4) + 3)].Merge();
-                //    sheet.Range[string.Format("C{0}:E{1}", (i * 4) + 3, (i * 4) + 3)].Text = p.idNo.Substring(0, 18);
-                //    sheet.Range[string.Format("F{0}", (i * 4) + 3)].Text = "民族";
-                //    sheet.Range[string.Format("G{0}", (i * 4) + 3)].Text = p.nation;
+                    sheet.Range[string.Format("B{0}", (index * 4) + 3)].Text = "身份证号";
+                    sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 3, (index * 4) + 3)].Merge();
+                    sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 3, (index * 4) + 3)].Text = p.idNo.Substring(0, 18);
+                    sheet.Range[string.Format("F{0}", (index * 4) + 3)].Text = "民族";
+                    sheet.Range[string.Format("G{0}", (index * 4) + 3)].Text = p.nation;
 
-                //    sheet.Range[string.Format("B{0}", (i * 4) + 4)].Text = "现居住地址";
-                //    sheet.Range[string.Format("C{0}:E{1}", (i * 4) + 4, (i * 4) + 4)].Merge();
-                //    sheet.Range[string.Format("C{0}:E{1}", (i * 4) + 4, (i * 4) + 4)].Text = p.location;
-                //    sheet.Range[string.Format("F{0}", (i * 4) + 4)].Text = "婚姻状况";
-                //    sheet.Range[string.Format("G{0}", (i * 4) + 4)].Text = "";
+                    sheet.Range[string.Format("B{0}", (index * 4) + 4)].Text = "现居住地址";
+                    sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 4, (index * 4) + 4)].Merge();
+                    sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 4, (index * 4) + 4)].Text = p.location;
+                    sheet.Range[string.Format("F{0}", (index * 4) + 4)].Text = "婚姻状况";
+                    sheet.Range[string.Format("G{0}", (index * 4) + 4)].Text = "";
 
-                //    sheet.Range[string.Format("B{0}", (i * 4) + 5)].Text = "备注";
-                //    sheet.Range[string.Format("C{0}:G{1}", (i * 4) + 5, (i * 4) + 5)].Merge();
+                    sheet.Range[string.Format("B{0}", (index * 4) + 5)].Text = "备注";
+                    sheet.Range[string.Format("C{0}:G{1}", (index * 4) + 5, (index * 4) + 5)].Merge();
 
-
-                //}
-
+                    index++;
+                }
+                
                 CellStyle cellStyle = sheet.GetDefaultRowStyle(1);
                 cellStyle.Font.Size = 14;
                 cellStyle.Font.FontName = "仿宋";
@@ -90,11 +91,11 @@ namespace MySpireOffice2
                     sheet.SetDefaultRowStyle(i, cellStyle);
                 }
 
-                //for (int i = 0; i < item.Value.Count; i++)
-                //{
-                //    sheet.Range[string.Format("A{0}:G{1}", (i * 4) + 2, (i * 4) + 5)].BorderInside(LineStyleType.Thin, ExcelColors.Black);
-                //    sheet.Range[string.Format("A{0}:G{1}", (i * 4) + 2, (i * 4) + 5)].BorderAround(LineStyleType.Medium, ExcelColors.Black);
-                //}
+                for (int i = 0; i < family.people.Count; i++)
+                {
+                    sheet.Range[string.Format("A{0}:G{1}", (i * 4) + 2, (i * 4) + 5)].BorderInside(LineStyleType.Thin, ExcelColors.Black);
+                    sheet.Range[string.Format("A{0}:G{1}", (i * 4) + 2, (i * 4) + 5)].BorderAround(LineStyleType.Medium, ExcelColors.Black);
+                }
 
                 sheet.SetRowHeight(1, 69);
                 sheet.SetColumnWidth(1, 4.71);
@@ -107,7 +108,7 @@ namespace MySpireOffice2
 
                 sheet.Range["A2:A" + sheet.LastRow].Style.WrapText = true;
 
-                book.SaveToFile("Output\\" + item.Key + ".xlsx", ExcelVersion.Version2010);
+                book.SaveToFile("Output\\" + family.hostHostName + "_" + family.hostNo + ".xlsx", ExcelVersion.Version2010);
 
             }
 
@@ -121,57 +122,97 @@ namespace MySpireOffice2
 
             Worksheet sheet = workbook.Worksheets[0];
 
+            Family family = null;
+
             string hostName = "";
             for (int r = sheet.FirstRow + 2; r <= sheet.LastRow; r++)
             {
-                string hostID = sheet[r, 1].Value.Trim();
+                string hostNo = sheet[r, 1].Value.Trim();
                 hostName = sheet[r, 2].Value.Trim();
                 string liveState = sheet[r, 14].Value.Trim();
-
-                if (hostID.Length > 5)
+                if (liveState == "死亡")
                 {
-                    hostNoPrefix = hostID.Substring(0, hostID.Length - 5);
+                    continue;
                 }
-                else if (!string.IsNullOrEmpty(hostID))
+
+                //if (hostNo.Length > 5)
+                //{
+                //    hostNoPrefix = hostNo.Substring(0, hostNo.Length - 5);
+                //}
+                //else if (!string.IsNullOrEmpty(hostNo))
+                //{
+                //    hostNo = hostNoPrefix + hostNo;
+                //}
+
+                if (this.lastHostName != hostName)
                 {
-                    hostID = hostNoPrefix + hostID;
+                    family = new Family()
+                    {
+                        hostNo = hostNo,
+                        hostHostName = hostName
+                    };
+
+                    this.lastHostName = hostName;
+                    this.dicFamilies.Add(hostName, family);
                 }
 
                 Person p = new Person()
                 {
-                    hostName = sheet[r, 1].Value.Trim(),
-                    name = sheet[r, 2].Value.Trim(),
-                    relation = sheet[r, 3].Value.Trim(),
-                    sex = sheet[r, 4].Value.Trim(),
-                    nation = sheet[r, 5].Value.Trim(),
-                    idNo = sheet[r, 6].Value.Trim(),
-                    group = sheet[r, 7].Value.Trim(),
-                    location = sheet[r, 8].Value.Trim(),
-                    education = sheet[r, 9].Value.Trim(),
-                    job = sheet[r, 10].Value.Trim()
+                    hostNo = hostNo,
+                    hostName = hostName,
+                    name = sheet[r, 3].Value.Trim(),
+                    relation = sheet[r, 4].Value.Trim(),
+                    idNo = sheet[r, 5].Value.Trim().Substring(0,18),
+                    birthday = new DateTime(int.Parse(sheet[r, 5].Value.Trim().Substring(6, 4)), int.Parse(sheet[r, 5].Value.Trim().Substring(10, 2)), int.Parse(sheet[r, 5].Value.Trim().Substring(12, 2))),
+                    sex = sheet[r, 7].Value.Trim(),
+                    huY_renY = sheet[r, 8].Value.Trim(),
+                    huY_renN = sheet[r, 9].Value.Trim(),
+                    huN_renY = sheet[r, 10].Value.Trim(),
+                    huN_renN = sheet[r, 11].Value.Trim(),
+                    nation = "",
+                    group = sheet[r, 12].Value.Trim(),
+                    isTuDiChengbao = sheet[r, 13].Value.Trim(),
+                    lifeState = liveState,
+                    marryState = sheet[r, 15].Value.Trim(),
+                    location = "",
+                    education = "",
+                    job = ""
                 };
                 p.isHost = p.hostName == p.name;
 
-                //List<Person> people = new List<Person>();
-                //if (dicFamilies.ContainsKey(p.hostName))
-                //{
-                //    people = dicFamilies[p.hostName];
-                //}
-                //else
-                //{
-                //    dicFamilies.Add(p.hostName, people);
-                //}
-                //if (p.isHost)
-                //{
-                //    people.Insert(0, p);
-                //}
-                //else
-                //{
-                //    people.Add(p);
-                //}
+                family.people.Add(p);
+
             }
 
             MessageBox.Show("导入成功！");
+        }
+
+        private void OrderFamily()
+        {
+            foreach (var family in this.dicFamilies.Values)
+            {
+                this.getHostNo(family);
+                family.people.OrderBy(p => p.birthday).OrderBy(p => p.isHost); ;
+            }
+        }
+
+        private string getHostNo(Family family)
+        {
+            string hostNo = "";
+            foreach (var person in family.people)
+            {
+                if (!string.IsNullOrEmpty(person.hostNo))
+                {
+                    hostNo = person.hostNo;
+                }
+            }
+
+            if (hostNo.Length == 5)
+            {
+                hostNo = this.hostNoPrefix + hostNo;
+            }
+            family.hostNo = hostNo;
+            return hostNo;
         }
     }
 
@@ -180,7 +221,7 @@ namespace MySpireOffice2
         public string hostNo;
         public string hostHostName;
 
-        List<Person> people = new List<Person>();
+        public List<Person> people = new List<Person>();
     }
 
     class Person
@@ -201,6 +242,8 @@ namespace MySpireOffice2
 
         public string idNo;
 
+        public DateTime birthday;
+
         public string group;
 
         public string location;
@@ -208,5 +251,21 @@ namespace MySpireOffice2
         public string education;
 
         public string job;
+
+        public string huY_renY;
+
+        public string huY_renN;
+
+        public string huN_renY;
+
+        public string huN_renN;
+
+        public string isTuDiChengbao;
+
+        public string lifeState;
+
+        public string marryState;
+
+
     }
 }
