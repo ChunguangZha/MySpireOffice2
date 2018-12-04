@@ -1,3 +1,0 @@
-F:\Github\MySpireOffice2\obj\Debug\MySpireOffice2.Properties.Resources.resources
-F:\Github\MySpireOffice2\obj\Debug\MySpireOffice2.csproj.GenerateResource.Cache
-F:\Github\MySpireOffice2\obj\Debug\MySpireOffice2.csprojResolveAssemblyReference.cache
