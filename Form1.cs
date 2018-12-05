@@ -17,10 +17,23 @@ namespace MySpireOffice2
         Dictionary<string, Family> dicFamilies = new Dictionary<string, Family>();
         string lastHostName = "";
 
+        List<Person> listperson = new List<Person>();
+
         public Form1()
         {
             InitializeComponent();
         }
+
+        private void btnLoadSrcTablePeopleInfo_Click(object sender, EventArgs e)
+        {
+            this.openFileDialog1.Filter = "xlsx文件|*.xlsx";
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.txtPeopleInfoTablePath.Text = this.openFileDialog1.FileName;
+                this.LoadTablePeopleInfo(this.openFileDialog1.FileName);
+            }
+        }
+
 
         private void btnLoadSrcTable5_Click(object sender, EventArgs e)
         {
@@ -31,6 +44,7 @@ namespace MySpireOffice2
                 this.LoadTable5(this.openFileDialog1.FileName);
             }
         }
+
 
         private void btnBuildTable4_Click(object sender, EventArgs e)
         {
@@ -49,6 +63,8 @@ namespace MySpireOffice2
                 sheet.Range["A1:G1"].Style.Font.FontName = "仿宋";
                 sheet.Range["A1:G1"].Style.VerticalAlignment = VerticalAlignType.Center;
                 sheet.Range["A1:G1"].Style.HorizontalAlignment = HorizontalAlignType.Center;
+                
+                this.getHostNo(family);
 
                 int index = 0;
                 foreach (var p in family.people.OrderBy(item => item.birthday).OrderByDescending(item => item.isHost))
@@ -72,7 +88,7 @@ namespace MySpireOffice2
                     sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 4, (index * 4) + 4)].Merge();
                     sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 4, (index * 4) + 4)].Text = p.location;
                     sheet.Range[string.Format("F{0}", (index * 4) + 4)].Text = "婚姻状况";
-                    sheet.Range[string.Format("G{0}", (index * 4) + 4)].Text = "";
+                    sheet.Range[string.Format("G{0}", (index * 4) + 4)].Text = p.marryState;
 
                     sheet.Range[string.Format("B{0}", (index * 4) + 5)].Text = "备注";
                     sheet.Range[string.Format("C{0}:G{1}", (index * 4) + 5, (index * 4) + 5)].Merge();
@@ -115,7 +131,7 @@ namespace MySpireOffice2
             MessageBox.Show("Save OK");
         }
 
-        private void LoadTable5(string filePath)
+        private void LoadTablePeopleInfo(string filePath)
         {
             Workbook workbook = new Workbook();
             workbook.LoadFromFile(filePath);
@@ -191,8 +207,48 @@ namespace MySpireOffice2
                     job = ""
                 };
                 p.isHost = p.hostName == p.name;
+                Person pfrom5 = this.listperson.Find(item => item.name == p.name);
+                if (pfrom5 != null)
+                {
+                    p.nation = pfrom5.nation;
+                    p.location = pfrom5.location;
+                    p.education = pfrom5.education;
+                    p.job = pfrom5.job;
+                }
 
                 family.people.Add(p);
+
+            }
+
+            MessageBox.Show("导入成功！");
+        }
+
+        private void LoadTable5(string filePath)
+        {
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile(filePath);
+
+            Worksheet sheet = workbook.Worksheets[0];
+            
+            for (int r = sheet.FirstRow + 1; r <= sheet.LastRow; r++)
+            {
+                string id = sheet[r, 6].Value.Trim();
+                Person p = new Person()
+                {
+                    hostName = sheet[r, 1].Value.Trim(),
+                    name = sheet[r, 2].Value.Trim(),
+                    relation = sheet[r, 3].Value.Trim(),
+                    sex = sheet[r, 4].Value.Trim(),
+                    nation = sheet[r, 5].Value.Trim(),
+                    idNo = id.Length > 18 ? id.Substring(0, 18) : id,
+                    group = sheet[r, 7].Value.Trim(),
+                    location = sheet[r, 8].Value.Trim(),
+                    education = sheet[r, 9].Value.Trim(),
+                    job = sheet[r, 10].Value.Trim(),
+                };
+                p.isHost = p.hostName == p.name;
+
+                this.listperson.Add(p);
 
             }
 
@@ -219,8 +275,17 @@ namespace MySpireOffice2
                 }
             }
 
-            if (hostNo.Length == 5)
+            if (!string.IsNullOrEmpty(hostNo) && hostNo.Length <= 5)
             {
+                if (hostNo.Length < 5)
+                {
+                    string zeroes = "";
+                    for (int i = 0; i < 5 - hostNo.Length; i++)
+                    {
+                        zeroes += "0";
+                    }
+                    hostNo = zeroes + hostNo;
+                }
                 hostNo = this.hostNoPrefix + hostNo;
             }
             family.hostNo = hostNo;
