@@ -30,11 +30,14 @@
         {
             this.btnBuildTable4 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnLoadSymbols = new System.Windows.Forms.Button();
+            this.btnBuild3Table = new System.Windows.Forms.Button();
             this.txtPeopleInfoTablePath = new System.Windows.Forms.TextBox();
             this.btnLoadPeopleInfoTable = new System.Windows.Forms.Button();
             this.txtSrcTable5FilePath = new System.Windows.Forms.TextBox();
             this.btnLoadSrcTable5 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.btnFormatDate = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,12 +47,14 @@
             this.btnBuildTable4.Name = "btnBuildTable4";
             this.btnBuildTable4.Size = new System.Drawing.Size(310, 23);
             this.btnBuildTable4.TabIndex = 0;
-            this.btnBuildTable4.Text = "生成";
+            this.btnBuildTable4.Text = "生成家庭人员调查表";
             this.btnBuildTable4.UseVisualStyleBackColor = true;
-            this.btnBuildTable4.Click += new System.EventHandler(this.btnBuildTable4_Click);
+            this.btnBuildTable4.Click += new System.EventHandler(this.btnBuildTable4家庭人员调查表_Click);
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnLoadSymbols);
+            this.groupBox1.Controls.Add(this.btnBuild3Table);
             this.groupBox1.Controls.Add(this.txtPeopleInfoTablePath);
             this.groupBox1.Controls.Add(this.btnLoadPeopleInfoTable);
             this.groupBox1.Controls.Add(this.txtSrcTable5FilePath);
@@ -61,6 +66,26 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "生成家庭人员调查表";
+            // 
+            // btnLoadSymbols
+            // 
+            this.btnLoadSymbols.Location = new System.Drawing.Point(30, 206);
+            this.btnLoadSymbols.Name = "btnLoadSymbols";
+            this.btnLoadSymbols.Size = new System.Drawing.Size(310, 23);
+            this.btnLoadSymbols.TabIndex = 5;
+            this.btnLoadSymbols.Text = "导入符号";
+            this.btnLoadSymbols.UseVisualStyleBackColor = true;
+            this.btnLoadSymbols.Click += new System.EventHandler(this.btnLoadSymbols_Click);
+            // 
+            // btnBuild3Table
+            // 
+            this.btnBuild3Table.Location = new System.Drawing.Point(30, 338);
+            this.btnBuild3Table.Name = "btnBuild3Table";
+            this.btnBuild3Table.Size = new System.Drawing.Size(310, 23);
+            this.btnBuild3Table.TabIndex = 3;
+            this.btnBuild3Table.Text = "生成人口摸底调查表";
+            this.btnBuild3Table.UseVisualStyleBackColor = true;
+            this.btnBuild3Table.Click += new System.EventHandler(this.btnBuild3Table人口摸底调查表_Click);
             // 
             // txtPeopleInfoTablePath
             // 
@@ -94,19 +119,30 @@
             this.btnLoadSrcTable5.Name = "btnLoadSrcTable5";
             this.btnLoadSrcTable5.Size = new System.Drawing.Size(310, 23);
             this.btnLoadSrcTable5.TabIndex = 1;
-            this.btnLoadSrcTable5.Text = "导入原始表5";
+            this.btnLoadSrcTable5.Text = "导入户籍信息表";
             this.btnLoadSrcTable5.UseVisualStyleBackColor = true;
-            this.btnLoadSrcTable5.Click += new System.EventHandler(this.btnLoadSrcTable5_Click);
+            this.btnLoadSrcTable5.Click += new System.EventHandler(this.btnLoad户籍信息表_Click);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // btnFormatDate
+            // 
+            this.btnFormatDate.Location = new System.Drawing.Point(524, 80);
+            this.btnFormatDate.Name = "btnFormatDate";
+            this.btnFormatDate.Size = new System.Drawing.Size(189, 23);
+            this.btnFormatDate.TabIndex = 2;
+            this.btnFormatDate.Text = "Format Date";
+            this.btnFormatDate.UseVisualStyleBackColor = true;
+            this.btnFormatDate.Click += new System.EventHandler(this.btnFormatDate_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnFormatDate);
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "村成员Excel生成";
@@ -126,6 +162,9 @@
 
         private System.Windows.Forms.Button btnLoadPeopleInfoTable;
         private System.Windows.Forms.TextBox txtPeopleInfoTablePath;
+        private System.Windows.Forms.Button btnFormatDate;
+        private System.Windows.Forms.Button btnBuild3Table;
+        private System.Windows.Forms.Button btnLoadSymbols;
     }
 }
 

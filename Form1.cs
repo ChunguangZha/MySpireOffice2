@@ -17,6 +17,11 @@ namespace MySpireOffice2
         Dictionary<string, Family> dicFamilies = new Dictionary<string, Family>();
         string lastHostName = "";
 
+        string symbolSquareRight = "";
+        string symbolSquareError = "";
+        string symbolSquareNull = "";
+        string symbolRight = "";
+
         List<Person> listperson = new List<Person>();
 
         public Form1()
@@ -35,25 +40,24 @@ namespace MySpireOffice2
         }
 
 
-        private void btnLoadSrcTable5_Click(object sender, EventArgs e)
+        private void btnLoad户籍信息表_Click(object sender, EventArgs e)
         {
             this.openFileDialog1.Filter = "xlsx文件|*.xlsx";
             if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 this.txtSrcTable5FilePath.Text = this.openFileDialog1.FileName;
-                this.LoadTable5(this.openFileDialog1.FileName);
+                this.Load户籍信息表(this.openFileDialog1.FileName);
             }
         }
 
 
-        private void btnBuildTable4_Click(object sender, EventArgs e)
+        private void btnBuildTable4家庭人员调查表_Click(object sender, EventArgs e)
         {
             foreach (var family in dicFamilies.Values)
             {
                 Workbook book = new Workbook();
 
                 Worksheet sheet = book.Worksheets[0];
-                sheet.DefaultRowHeight = 27;
 
                 sheet.Name = family.hostHostName;
                 sheet.Range["A1:G1"].Merge();
@@ -86,7 +90,7 @@ namespace MySpireOffice2
 
                     sheet.Range[string.Format("B{0}", (index * 4) + 4)].Text = "现居住地址";
                     sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 4, (index * 4) + 4)].Merge();
-                    sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 4, (index * 4) + 4)].Text = p.location;
+                    sheet.Range[string.Format("C{0}:E{1}", (index * 4) + 4, (index * 4) + 4)].Text = string.IsNullOrEmpty(p.location) ? "讷河市龙河镇国庆村" : p.location;
                     sheet.Range[string.Format("F{0}", (index * 4) + 4)].Text = "婚姻状况";
                     sheet.Range[string.Format("G{0}", (index * 4) + 4)].Text = p.marryState;
 
@@ -105,6 +109,7 @@ namespace MySpireOffice2
                 for (int i = sheet.FirstRow + 1; i <= sheet.LastRow; i++)
                 {
                     sheet.SetDefaultRowStyle(i, cellStyle);
+                    sheet.SetRowHeight(i, 27);
                 }
 
                 for (int i = 0; i < family.people.Count; i++)
@@ -120,15 +125,207 @@ namespace MySpireOffice2
                 sheet.SetColumnWidth(4, 11.14);
                 sheet.SetColumnWidth(5, 10.71);
                 sheet.SetColumnWidth(6, 14.71);
-                sheet.SetColumnWidth(7, 12.86);
+                sheet.SetColumnWidth(7, 25);
 
                 sheet.Range["A2:A" + sheet.LastRow].Style.WrapText = true;
 
-                book.SaveToFile("Output\\" + family.hostHostName + "_" + family.hostNo + ".xlsx", ExcelVersion.Version2010);
+                book.SaveToFile("家庭人员调查表\\" + family.hostHostName + "_" + family.hostNo + ".xlsx", ExcelVersion.Version2010);
 
             }
 
             MessageBox.Show("Save OK");
+        }
+
+
+        private void btnBuild3Table人口摸底调查表_Click(object sender, EventArgs e)
+        {
+            foreach (var family in dicFamilies.Values)
+            {
+                Workbook book = new Workbook();
+
+                Worksheet sheet = book.Worksheets[0];
+
+                sheet.Name = family.hostHostName;
+                this.getHostNo(family);
+
+                const int itemRowCount = 13;
+                int itemIndex = 0;
+
+                foreach (var p in family.people.OrderBy(item => item.birthday).OrderByDescending(item => item.isHost))
+                {
+                    int row = itemIndex * itemRowCount + 1;
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Merge();
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Text = "人员摸底调查表";
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.Font.IsBold = true;
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.Font.Size = 18;
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.Font.FontName = "仿宋";
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.VerticalAlignment = VerticalAlignType.Center;
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.HorizontalAlignment = HorizontalAlignType.Center;
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Merge();
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Text = "      国庆村     七屯                       调查时间:2018年12月";
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}", row)].Text = "姓 名";
+                    sheet.Range[string.Format("B{0}", row)].Text = p.name;
+                    sheet.Range[string.Format("C{0}", row)].Text = "性 别";
+                    sheet.Range[string.Format("D{0}", row)].Text = p.sex;
+                    sheet.Range[string.Format("E{0}", row)].Text = "民 族";
+                    sheet.Range[string.Format("F{0}", row)].Text = p.nation;
+                    sheet.Range[string.Format("G{0}", row)].Text = "出生日期";
+                    sheet.Range[string.Format("H{0}", row)].Text = p.birthday.ToShortDateString();
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}", row)].Text = "学 历";
+                    sheet.Range[string.Format("B{0}", row)].Text = p.education;
+                    sheet.Range[string.Format("C{0}:D{1}", row, row)].Merge();
+                    sheet.Range[string.Format("C{0}:D{1}", row, row)].Text = "身份证号";
+                    sheet.Range[string.Format("E{0}:F{1}", row, row)].Merge();
+                    sheet.Range[string.Format("E{0}:F{1}", row, row)].Text = p.idNo;
+                    sheet.Range[string.Format("G{0}", row)].Text = "联系电话";
+                    sheet.Range[string.Format("H{0}", row)].Text = p.phone;
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}", row)].Text = "兵役状况";
+                    sheet.Range[string.Format("B{0}:D{1}", row, row)].Merge();
+                    sheet.Range[string.Format("B{0}:D{1}", row, row)].Text = "年月日至年月日";
+                    sheet.Range[string.Format("E{0}:G{1}", row, row)].Merge();
+                    sheet.Range[string.Format("E{0}:G{1}", row, row)].Text = "对本集体经济组织特殊贡献情况";
+                    sheet.Range[string.Format("H{0}", row)].Text = "（有/无）";
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}", row)].Text = "婚姻状况";
+                    sheet.Range[string.Format("B{0}:H{1}", row, row)].Merge();
+
+                    string merryStateText = (p.marryState == "未婚" ? this.symbolSquareRight : this.symbolSquareNull) + "未婚 " +
+                                            (p.marryState == "已婚" ? this.symbolSquareRight : this.symbolSquareNull) + "已婚 " +
+                                            (p.marryState == "离异" ? this.symbolSquareRight : this.symbolSquareNull) + "离异 " +
+                                            (p.marryState == "丧偶" ? this.symbolSquareRight : this.symbolSquareNull) + "丧偶 " +
+                                            "  婚姻状况变动日期：    年   月    日";
+
+                    sheet.Range[string.Format("B{0}:H{1}", row, row)].Text = merryStateText;
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "取得家庭承包地情况";
+
+                    string jiatingchengbaodiqingkuang = (p.isTuDiChengbao == "是" ? this.symbolSquareRight + "是；" + this.symbolSquareNull + "否" : this.symbolSquareNull + "是；" + this.symbolSquareRight + "否") +
+                                                        "  原因：" +
+                                                        "1、" + (p.lifeState == "新生" ? this.symbolRight : "") + "新生" +
+                                                        "2、" + (p.lifeState == "婚入" ? this.symbolRight : "") + "婚入" +
+                                                        "3、" + (p.lifeState == "世居" ? this.symbolRight : "") + "世居" +
+                                                        "4、" + (p.lifeState != "新生" && p.lifeState != "婚入" && p.lifeState != "世居" ? this.symbolRight : "") + "  其他   ";
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = jiatingchengbaodiqingkuang;
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "户口性质变动情况";
+
+                    string hukouxingzhibiandong = "       年  月  日 因                          转为非农业";
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = hukouxingzhibiandong;
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "户籍地变动情况";
+
+                    string hujidibiandongqingkuang = "       年  月  日 因        迁出（入）至";
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = hujidibiandongqingkuang;
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
+                    sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "成员身份认定情况";
+
+                    string chengyuanshenfenrendingqingkuang = "       年  月  日 被认定为              集体经济组织成员";
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
+                    sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = chengyuanshenfenrendingqingkuang;
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}", row)].Text = "其他情况";                    
+                    sheet.Range[string.Format("B{0}:H{1}", row, row)].Merge();
+
+                    row += 1;
+                    sheet.Range[string.Format("A{0}:C{1}", row, row)].Merge();
+                    sheet.Range[string.Format("A{0}:C{1}", row, row)].Text = "目前在本集体经济组织状态";
+
+                    string jitijingjizuzhizhuangtai = (string.IsNullOrEmpty(p.huY_renY) ? this.symbolSquareNull : this.symbolSquareRight) + "户在人在；" +
+                                                      (string.IsNullOrEmpty(p.huY_renN) ? this.symbolSquareNull : this.symbolSquareRight) + "户在人不在；" +
+                                                      (string.IsNullOrEmpty(p.huN_renY) ? this.symbolSquareNull : this.symbolSquareRight) + "人在户不在；" +
+                                                      (string.IsNullOrEmpty(p.huN_renN) ? this.symbolSquareNull : this.symbolSquareRight) + "人户都不在";
+                    sheet.Range[string.Format("D{0}:H{1}", row, row)].Merge();
+                    sheet.Range[string.Format("D{0}:H{1}", row, row)].Text = jitijingjizuzhizhuangtai;
+                    
+                    itemIndex++;
+                }
+
+                CellStyle cellStyle = sheet.GetDefaultRowStyle(1);
+                cellStyle.Font.Size = 14;
+                cellStyle.Font.FontName = "仿宋";
+                cellStyle.Font.IsBold = false;
+                cellStyle.VerticalAlignment = VerticalAlignType.Center;
+                cellStyle.HorizontalAlignment = HorizontalAlignType.Center;
+                for (int i = sheet.FirstRow; i <= sheet.LastRow; i++)
+                {
+                    if ((i - 1) % 13 != 0)
+                    {
+                        sheet.SetDefaultRowStyle(i, cellStyle);
+                        sheet.SetRowHeight(i, 27);
+                    }
+                    else
+                    {
+                        sheet.SetRowHeight(i, 69);
+                    }
+                }
+
+                for (int i = 0; i < family.people.Count; i++)
+                {
+                    int start = (i * itemRowCount) + 1;
+                    int end = start + 11;
+                    sheet.Range[string.Format("A{0}:H{1}", start, end)].BorderInside(LineStyleType.Thin, ExcelColors.Black);
+                    sheet.Range[string.Format("A{0}:H{1}", start, end)].BorderAround(LineStyleType.Medium, ExcelColors.Black);
+                }
+
+                sheet.SetColumnWidth(1, 13);
+                sheet.SetColumnWidth(2, 15);
+                sheet.SetColumnWidth(3, 11);
+                sheet.SetColumnWidth(4, 11);
+                sheet.SetColumnWidth(5, 13);
+                sheet.SetColumnWidth(6, 13);
+                sheet.SetColumnWidth(7, 14);
+                sheet.SetColumnWidth(8, 24);
+
+                sheet.Range["A2:A" + sheet.LastRow].Style.WrapText = true;
+
+                book.SaveToFile("人口摸底调查表\\" + family.hostHostName + "_" + family.hostNo + ".xlsx", ExcelVersion.Version2010);
+
+            }
+
+            MessageBox.Show("Save OK");
+        }
+
+
+
+        private void btnLoadSymbols_Click(object sender, EventArgs e)
+        {
+            this.openFileDialog1.Filter = "xlsx文件|*.xlsx";
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                Workbook workbook = new Workbook();
+                workbook.LoadFromFile(this.openFileDialog1.FileName);
+
+                Worksheet sheet = workbook.Worksheets[0];
+                this.symbolSquareRight = sheet.Range["A1"].Text;
+                this.symbolSquareError = sheet.Range["B1"].Text;
+                this.symbolSquareNull = sheet.Range["C1"].Text;
+                this.symbolRight = sheet.Range["D1"].Text;
+
+                workbook.Dispose();
+
+                MessageBox.Show("符号导入成功");
+            }
         }
 
         private void LoadTablePeopleInfo(string filePath)
@@ -143,10 +340,14 @@ namespace MySpireOffice2
             string hostName = "";
             for (int r = sheet.FirstRow + 2; r <= sheet.LastRow; r++)
             {
+                if (string.IsNullOrEmpty(sheet[r, 3].Value.Trim()))
+                {
+                    break;
+                }
                 string hostNo = sheet[r, 1].Value.Trim();
                 hostName = sheet[r, 2].Value.Trim();
                 string liveState = sheet[r, 14].Value.Trim();
-                if (liveState == "死亡")
+                if (liveState == "死亡" || liveState == "")
                 {
                     continue;
                 }
@@ -204,7 +405,8 @@ namespace MySpireOffice2
                     marryState = sheet[r, 15].Value.Trim(),
                     location = "",
                     education = "",
-                    job = ""
+                    job = "",
+                    phone = sheet[r, 17].Value.Trim()
                 };
                 p.isHost = p.hostName == p.name;
                 Person pfrom5 = this.listperson.Find(item => item.name == p.name);
@@ -223,7 +425,7 @@ namespace MySpireOffice2
             MessageBox.Show("导入成功！");
         }
 
-        private void LoadTable5(string filePath)
+        private void Load户籍信息表(string filePath)
         {
             Workbook workbook = new Workbook();
             workbook.LoadFromFile(filePath);
@@ -235,16 +437,16 @@ namespace MySpireOffice2
                 string id = sheet[r, 6].Value.Trim();
                 Person p = new Person()
                 {
-                    hostName = sheet[r, 1].Value.Trim(),
-                    name = sheet[r, 2].Value.Trim(),
-                    relation = sheet[r, 3].Value.Trim(),
+                    hostName = sheet[r, 18].Value.Trim(),
+                    name = sheet[r, 3].Value.Trim(),
+                    relation = sheet[r, 2].Value.Trim(),
                     sex = sheet[r, 4].Value.Trim(),
                     nation = sheet[r, 5].Value.Trim(),
                     idNo = id.Length > 18 ? id.Substring(0, 18) : id,
-                    group = sheet[r, 7].Value.Trim(),
-                    location = sheet[r, 8].Value.Trim(),
-                    education = sheet[r, 9].Value.Trim(),
-                    job = sheet[r, 10].Value.Trim(),
+                    group = sheet[r, 12].Value.Trim(),
+                    location = sheet[r, 15].Value.Trim(),
+                    education = sheet[r, 16].Value.Trim(),
+                    job = sheet[r, 17].Value.Trim(),
                 };
                 p.isHost = p.hostName == p.name;
 
@@ -291,6 +493,31 @@ namespace MySpireOffice2
             family.hostNo = hostNo;
             return hostNo;
         }
+
+        private void btnFormatDate_Click(object sender, EventArgs e)
+        {
+            this.openFileDialog1.Filter = "xlsx文件|*.xlsx";
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = this.openFileDialog1.FileName;
+
+                Workbook workbook = new Workbook();
+                workbook.LoadFromFile(filePath);
+
+                Worksheet sheet = workbook.Worksheets[0];
+                
+                for (int r = sheet.FirstRow + 6; r <= sheet.LastRow - 6; r++)
+                {
+                    string date = sheet[r, 1].Value.Trim();
+                    if (date.Length == 4)
+                    {
+                        sheet[r, 1].Value = date + "/12/31";
+                    }
+                }
+
+                workbook.SaveToFile("FormatDate2.xlsx");
+                MessageBox.Show("完成");
+            }
     }
 
     class Family
@@ -301,48 +528,50 @@ namespace MySpireOffice2
         public List<Person> people = new List<Person>();
     }
 
-    class Person
-    {
-        public bool isHost;
+        class Person
+        {
+            public bool isHost;
 
-        public string hostName;
+            public string hostName;
 
-        public string hostNo;
+            public string hostNo;
 
-        public string name;
+            public string name;
 
-        public string relation;
+            public string relation;
 
-        public string sex;
+            public string sex;
 
-        public string nation;
+            public string nation;
 
-        public string idNo;
+            public string idNo;
 
-        public DateTime birthday;
+            public DateTime birthday;
 
-        public string group;
+            public string group;
 
-        public string location;
+            public string location;
 
-        public string education;
+            public string education;
 
-        public string job;
+            public string job;
 
-        public string huY_renY;
+            public string huY_renY;
 
-        public string huY_renN;
+            public string huY_renN;
 
-        public string huN_renY;
+            public string huN_renY;
 
-        public string huN_renN;
+            public string huN_renN;
 
-        public string isTuDiChengbao;
+            public string isTuDiChengbao;
 
-        public string lifeState;
+            public string lifeState;
 
-        public string marryState;
+            public string marryState;
 
+            public string phone;
 
+        }
     }
 }
