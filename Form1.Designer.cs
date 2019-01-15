@@ -38,6 +38,8 @@
             this.btnLoadSrcTable5 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnFormatDate = new System.Windows.Forms.Button();
+            this.txtGroup = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,6 +55,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.txtGroup);
             this.groupBox1.Controls.Add(this.btnLoadSymbols);
             this.groupBox1.Controls.Add(this.btnBuild3Table);
             this.groupBox1.Controls.Add(this.txtPeopleInfoTablePath);
@@ -69,7 +73,7 @@
             // 
             // btnLoadSymbols
             // 
-            this.btnLoadSymbols.Location = new System.Drawing.Point(30, 206);
+            this.btnLoadSymbols.Location = new System.Drawing.Point(30, 249);
             this.btnLoadSymbols.Name = "btnLoadSymbols";
             this.btnLoadSymbols.Size = new System.Drawing.Size(310, 23);
             this.btnLoadSymbols.TabIndex = 5;
@@ -89,7 +93,7 @@
             // 
             // txtPeopleInfoTablePath
             // 
-            this.txtPeopleInfoTablePath.Location = new System.Drawing.Point(6, 167);
+            this.txtPeopleInfoTablePath.Location = new System.Drawing.Point(6, 210);
             this.txtPeopleInfoTablePath.Name = "txtPeopleInfoTablePath";
             this.txtPeopleInfoTablePath.ReadOnly = true;
             this.txtPeopleInfoTablePath.Size = new System.Drawing.Size(370, 21);
@@ -97,7 +101,7 @@
             // 
             // btnLoadPeopleInfoTable
             // 
-            this.btnLoadPeopleInfoTable.Location = new System.Drawing.Point(30, 121);
+            this.btnLoadPeopleInfoTable.Location = new System.Drawing.Point(30, 164);
             this.btnLoadPeopleInfoTable.Name = "btnLoadPeopleInfoTable";
             this.btnLoadPeopleInfoTable.Size = new System.Drawing.Size(310, 23);
             this.btnLoadPeopleInfoTable.TabIndex = 3;
@@ -107,7 +111,7 @@
             // 
             // txtSrcTable5FilePath
             // 
-            this.txtSrcTable5FilePath.Location = new System.Drawing.Point(6, 77);
+            this.txtSrcTable5FilePath.Location = new System.Drawing.Point(6, 120);
             this.txtSrcTable5FilePath.Name = "txtSrcTable5FilePath";
             this.txtSrcTable5FilePath.ReadOnly = true;
             this.txtSrcTable5FilePath.Size = new System.Drawing.Size(370, 21);
@@ -115,7 +119,7 @@
             // 
             // btnLoadSrcTable5
             // 
-            this.btnLoadSrcTable5.Location = new System.Drawing.Point(30, 37);
+            this.btnLoadSrcTable5.Location = new System.Drawing.Point(30, 80);
             this.btnLoadSrcTable5.Name = "btnLoadSrcTable5";
             this.btnLoadSrcTable5.Size = new System.Drawing.Size(310, 23);
             this.btnLoadSrcTable5.TabIndex = 1;
@@ -136,6 +140,22 @@
             this.btnFormatDate.Text = "Format Date";
             this.btnFormatDate.UseVisualStyleBackColor = true;
             this.btnFormatDate.Click += new System.EventHandler(this.btnFormatDate_Click);
+            // 
+            // txtGroup
+            // 
+            this.txtGroup.Location = new System.Drawing.Point(79, 38);
+            this.txtGroup.Name = "txtGroup";
+            this.txtGroup.Size = new System.Drawing.Size(100, 21);
+            this.txtGroup.TabIndex = 6;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(185, 41);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(17, 12);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "屯";
             // 
             // Form1
             // 
@@ -165,6 +185,8 @@
         private System.Windows.Forms.Button btnFormatDate;
         private System.Windows.Forms.Button btnBuild3Table;
         private System.Windows.Forms.Button btnLoadSymbols;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtGroup;
     }
 }
 

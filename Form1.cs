@@ -164,7 +164,7 @@ namespace MySpireOffice2
 
                     row += 1;
                     sheet.Range[string.Format("A{0}:H{1}", row, row)].Merge();
-                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Text = "      国庆村     七屯                       调查时间:2018年12月";
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Text = "      国庆村     " + txtGroup.Text + "屯                       调查时间:2018年12月";
 
                     row += 1;
                     sheet.Range[string.Format("A{0}", row)].Text = "姓 名";
@@ -239,7 +239,7 @@ namespace MySpireOffice2
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "成员身份认定情况";
 
-                    string chengyuanshenfenrendingqingkuang = "       年  月  日 被认定为              集体经济组织成员";
+                    string chengyuanshenfenrendingqingkuang = "  2019年  1月 30日 被认定为      国庆村  集体经济组织成员";
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = chengyuanshenfenrendingqingkuang;
 
@@ -330,6 +330,9 @@ namespace MySpireOffice2
 
         private void LoadTablePeopleInfo(string filePath)
         {
+            this.lastHostName = "";
+            this.dicFamilies.Clear();
+
             Workbook workbook = new Workbook();
             workbook.LoadFromFile(filePath);
 
@@ -427,6 +430,7 @@ namespace MySpireOffice2
 
         private void Load户籍信息表(string filePath)
         {
+            this.listperson.Clear();
             Workbook workbook = new Workbook();
             workbook.LoadFromFile(filePath);
 
