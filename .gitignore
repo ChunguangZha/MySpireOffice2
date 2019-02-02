@@ -5,3 +5,4 @@ obj/
 *.user
 .vs/MySpireOffice2/v15/.suo
 .vs/MySpireOffice2/v15/.suo
+*.pdb
