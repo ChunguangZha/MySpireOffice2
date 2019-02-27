@@ -157,7 +157,7 @@ namespace MySpireOffice2
                     sheet.Range[string.Format("A{0}:H{1}", row, row)].Merge();
                     sheet.Range[string.Format("A{0}:H{1}", row, row)].Text = "人员摸底调查表";
                     sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.Font.IsBold = true;
-                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.Font.Size = 18;
+                    sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.Font.Size = 12;
                     sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.Font.FontName = "仿宋";
                     sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.VerticalAlignment = VerticalAlignType.Center;
                     sheet.Range[string.Format("A{0}:H{1}", row, row)].Style.HorizontalAlignment = HorizontalAlignType.Center;
@@ -192,7 +192,7 @@ namespace MySpireOffice2
                     sheet.Range[string.Format("B{0}:D{1}", row, row)].Text = "年月日至年月日";
                     sheet.Range[string.Format("E{0}:G{1}", row, row)].Merge();
                     sheet.Range[string.Format("E{0}:G{1}", row, row)].Text = "对本集体经济组织特殊贡献情况";
-                    sheet.Range[string.Format("H{0}", row)].Text = "（有/无）";
+                    sheet.Range[string.Format("H{0}", row)].Text = "（有/无）无";
 
                     row += 1;
                     sheet.Range[string.Format("A{0}", row)].Text = "婚姻状况";
@@ -212,10 +212,10 @@ namespace MySpireOffice2
 
                     string jiatingchengbaodiqingkuang = (p.isTuDiChengbao == "是" ? this.symbolSquareRight + "是；" + this.symbolSquareNull + "否" : this.symbolSquareNull + "是；" + this.symbolSquareRight + "否") +
                                                         "  原因：" +
-                                                        "1、" + (p.lifeState == "新生" ? this.symbolRight : "") + "新生" +
-                                                        "2、" + (p.lifeState == "婚入" ? this.symbolRight : "") + "婚入" +
-                                                        "3、" + (p.lifeState == "世居" ? this.symbolRight : "") + "世居" +
-                                                        "4、" + (p.lifeState != "新生" && p.lifeState != "婚入" && p.lifeState != "世居" ? this.symbolRight : "") + "  其他   ";
+                                                        (p.lifeState == "新生" ? this.symbolRight : "") + "1、新生" + " " +
+                                                        (p.lifeState == "婚入" ? this.symbolRight : "") + "2、婚入" + " " +
+                                                        (p.lifeState == "世居" ? this.symbolRight : "") + "3、世居" + " " +
+                                                        (p.lifeState != "新生" && p.lifeState != "婚入" && p.lifeState != "世居" ? this.symbolRight : "") + "4、其他   ";
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = jiatingchengbaodiqingkuang;
 
@@ -262,40 +262,40 @@ namespace MySpireOffice2
                 }
 
                 CellStyle cellStyle = sheet.GetDefaultRowStyle(1);
-                cellStyle.Font.Size = 14;
+                cellStyle.Font.Size = 12;
                 cellStyle.Font.FontName = "仿宋";
                 cellStyle.Font.IsBold = false;
                 cellStyle.VerticalAlignment = VerticalAlignType.Center;
                 cellStyle.HorizontalAlignment = HorizontalAlignType.Center;
                 for (int i = sheet.FirstRow; i <= sheet.LastRow; i++)
                 {
-                    if ((i - 1) % 13 != 0)
-                    {
+                    //if ((i - 1) % 13 != 0)
+                    //{
                         sheet.SetDefaultRowStyle(i, cellStyle);
-                        sheet.SetRowHeight(i, 27);
-                    }
-                    else
-                    {
-                        sheet.SetRowHeight(i, 69);
-                    }
+                        sheet.SetRowHeight(i, 15);
+                    //}
+                    //else
+                    //{
+                    //    sheet.SetRowHeight(i, 69);
+                    //}
                 }
 
                 for (int i = 0; i < family.people.Count; i++)
                 {
-                    int start = (i * itemRowCount) + 1;
+                    int start = (i * itemRowCount) + 3;
                     int end = start + 11;
                     sheet.Range[string.Format("A{0}:H{1}", start, end)].BorderInside(LineStyleType.Thin, ExcelColors.Black);
                     sheet.Range[string.Format("A{0}:H{1}", start, end)].BorderAround(LineStyleType.Medium, ExcelColors.Black);
                 }
 
-                sheet.SetColumnWidth(1, 13);
-                sheet.SetColumnWidth(2, 15);
-                sheet.SetColumnWidth(3, 11);
-                sheet.SetColumnWidth(4, 11);
+                sheet.SetColumnWidth(1, 10);
+                sheet.SetColumnWidth(2, 10);
+                sheet.SetColumnWidth(3, 6);
+                sheet.SetColumnWidth(4, 6);
                 sheet.SetColumnWidth(5, 13);
-                sheet.SetColumnWidth(6, 13);
+                sheet.SetColumnWidth(6, 7);
                 sheet.SetColumnWidth(7, 14);
-                sheet.SetColumnWidth(8, 24);
+                sheet.SetColumnWidth(8, 21);
 
                 sheet.Range["A2:A" + sheet.LastRow].Style.WrapText = true;
 
@@ -317,10 +317,10 @@ namespace MySpireOffice2
                 workbook.LoadFromFile(this.openFileDialog1.FileName);
 
                 Worksheet sheet = workbook.Worksheets[0];
-                this.symbolSquareRight = sheet.Range["A1"].Text;
-                this.symbolSquareError = sheet.Range["B1"].Text;
-                this.symbolSquareNull = sheet.Range["C1"].Text;
-                this.symbolRight = sheet.Range["D1"].Text;
+                this.symbolSquareRight = sheet.Range["A2"].Text;
+                this.symbolSquareError = sheet.Range["B2"].Text;
+                this.symbolSquareNull = sheet.Range["C2"].Text;
+                this.symbolRight = sheet.Range["D2"].Text;
 
                 workbook.Dispose();
 
