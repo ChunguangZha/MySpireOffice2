@@ -30,6 +30,8 @@
         {
             this.btnBuildTable4 = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtGroup = new System.Windows.Forms.TextBox();
             this.btnLoadSymbols = new System.Windows.Forms.Button();
             this.btnBuild3Table = new System.Windows.Forms.Button();
             this.txtPeopleInfoTablePath = new System.Windows.Forms.TextBox();
@@ -38,8 +40,8 @@
             this.btnLoadSrcTable5 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.btnFormatDate = new System.Windows.Forms.Button();
-            this.txtGroup = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.btnLoad人口登记表 = new System.Windows.Forms.Button();
+            this.txt人口登记表路径 = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,14 +57,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.txt人口登记表路径);
+            this.groupBox1.Controls.Add(this.btnLoad人口登记表);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.txtGroup);
             this.groupBox1.Controls.Add(this.btnLoadSymbols);
             this.groupBox1.Controls.Add(this.btnBuild3Table);
-            this.groupBox1.Controls.Add(this.txtPeopleInfoTablePath);
-            this.groupBox1.Controls.Add(this.btnLoadPeopleInfoTable);
-            this.groupBox1.Controls.Add(this.txtSrcTable5FilePath);
-            this.groupBox1.Controls.Add(this.btnLoadSrcTable5);
             this.groupBox1.Controls.Add(this.btnBuildTable4);
             this.groupBox1.Location = new System.Drawing.Point(12, 27);
             this.groupBox1.Name = "groupBox1";
@@ -70,6 +70,22 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "生成家庭人员调查表";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(185, 41);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(17, 12);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "屯";
+            // 
+            // txtGroup
+            // 
+            this.txtGroup.Location = new System.Drawing.Point(79, 38);
+            this.txtGroup.Name = "txtGroup";
+            this.txtGroup.Size = new System.Drawing.Size(100, 21);
+            this.txtGroup.TabIndex = 6;
             // 
             // btnLoadSymbols
             // 
@@ -93,7 +109,7 @@
             // 
             // txtPeopleInfoTablePath
             // 
-            this.txtPeopleInfoTablePath.Location = new System.Drawing.Point(6, 210);
+            this.txtPeopleInfoTablePath.Location = new System.Drawing.Point(418, 242);
             this.txtPeopleInfoTablePath.Name = "txtPeopleInfoTablePath";
             this.txtPeopleInfoTablePath.ReadOnly = true;
             this.txtPeopleInfoTablePath.Size = new System.Drawing.Size(370, 21);
@@ -101,7 +117,7 @@
             // 
             // btnLoadPeopleInfoTable
             // 
-            this.btnLoadPeopleInfoTable.Location = new System.Drawing.Point(30, 164);
+            this.btnLoadPeopleInfoTable.Location = new System.Drawing.Point(454, 213);
             this.btnLoadPeopleInfoTable.Name = "btnLoadPeopleInfoTable";
             this.btnLoadPeopleInfoTable.Size = new System.Drawing.Size(310, 23);
             this.btnLoadPeopleInfoTable.TabIndex = 3;
@@ -111,7 +127,7 @@
             // 
             // txtSrcTable5FilePath
             // 
-            this.txtSrcTable5FilePath.Location = new System.Drawing.Point(6, 120);
+            this.txtSrcTable5FilePath.Location = new System.Drawing.Point(418, 149);
             this.txtSrcTable5FilePath.Name = "txtSrcTable5FilePath";
             this.txtSrcTable5FilePath.ReadOnly = true;
             this.txtSrcTable5FilePath.Size = new System.Drawing.Size(370, 21);
@@ -119,7 +135,7 @@
             // 
             // btnLoadSrcTable5
             // 
-            this.btnLoadSrcTable5.Location = new System.Drawing.Point(30, 80);
+            this.btnLoadSrcTable5.Location = new System.Drawing.Point(454, 120);
             this.btnLoadSrcTable5.Name = "btnLoadSrcTable5";
             this.btnLoadSrcTable5.Size = new System.Drawing.Size(310, 23);
             this.btnLoadSrcTable5.TabIndex = 1;
@@ -141,21 +157,23 @@
             this.btnFormatDate.UseVisualStyleBackColor = true;
             this.btnFormatDate.Click += new System.EventHandler(this.btnFormatDate_Click);
             // 
-            // txtGroup
+            // btnLoad人口登记表
             // 
-            this.txtGroup.Location = new System.Drawing.Point(79, 38);
-            this.txtGroup.Name = "txtGroup";
-            this.txtGroup.Size = new System.Drawing.Size(100, 21);
-            this.txtGroup.TabIndex = 6;
+            this.btnLoad人口登记表.Location = new System.Drawing.Point(30, 76);
+            this.btnLoad人口登记表.Name = "btnLoad人口登记表";
+            this.btnLoad人口登记表.Size = new System.Drawing.Size(310, 23);
+            this.btnLoad人口登记表.TabIndex = 8;
+            this.btnLoad人口登记表.Text = "导入人口登记表";
+            this.btnLoad人口登记表.UseVisualStyleBackColor = true;
+            this.btnLoad人口登记表.Click += new System.EventHandler(this.btnLoad人口登记表_Click);
             // 
-            // label1
+            // txt人口登记表路径
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(185, 41);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(17, 12);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "屯";
+            this.txt人口登记表路径.Location = new System.Drawing.Point(30, 106);
+            this.txt人口登记表路径.Name = "txt人口登记表路径";
+            this.txt人口登记表路径.ReadOnly = true;
+            this.txt人口登记表路径.Size = new System.Drawing.Size(310, 21);
+            this.txt人口登记表路径.TabIndex = 9;
             // 
             // Form1
             // 
@@ -164,11 +182,16 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.btnFormatDate);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.btnLoadPeopleInfoTable);
+            this.Controls.Add(this.btnLoadSrcTable5);
+            this.Controls.Add(this.txtPeopleInfoTablePath);
+            this.Controls.Add(this.txtSrcTable5FilePath);
             this.Name = "Form1";
             this.Text = "村成员Excel生成";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -187,6 +210,8 @@
         private System.Windows.Forms.Button btnLoadSymbols;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtGroup;
+        private System.Windows.Forms.TextBox txt人口登记表路径;
+        private System.Windows.Forms.Button btnLoad人口登记表;
     }
 }
 

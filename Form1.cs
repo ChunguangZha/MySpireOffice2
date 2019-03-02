@@ -17,6 +17,7 @@ namespace MySpireOffice2
         Dictionary<string, Family> dicFamilies = new Dictionary<string, Family>();
         string lastHostName = "";
 
+        string inputSymRight = "";
         string symbolSquareRight = "";
         string symbolSquareError = "";
         string symbolSquareNull = "";
@@ -63,7 +64,7 @@ namespace MySpireOffice2
                 sheet.Range["A1:G1"].Merge();
                 sheet.Range["A1:G1"].Text = "村确认家庭人口调查表  （户口薄）";
                 sheet.Range["A1:G1"].Style.Font.IsBold = true;
-                sheet.Range["A1:G1"].Style.Font.Size = 18;
+                sheet.Range["A1:G1"].Style.Font.Size = 14;
                 sheet.Range["A1:G1"].Style.Font.FontName = "仿宋";
                 sheet.Range["A1:G1"].Style.VerticalAlignment = VerticalAlignType.Center;
                 sheet.Range["A1:G1"].Style.HorizontalAlignment = HorizontalAlignType.Center;
@@ -101,7 +102,7 @@ namespace MySpireOffice2
                 }
                 
                 CellStyle cellStyle = sheet.GetDefaultRowStyle(1);
-                cellStyle.Font.Size = 14;
+                cellStyle.Font.Size = 12;
                 cellStyle.Font.FontName = "仿宋";
                 cellStyle.Font.IsBold = false;
                 cellStyle.VerticalAlignment = VerticalAlignType.Center;
@@ -109,7 +110,7 @@ namespace MySpireOffice2
                 for (int i = sheet.FirstRow + 1; i <= sheet.LastRow; i++)
                 {
                     sheet.SetDefaultRowStyle(i, cellStyle);
-                    sheet.SetRowHeight(i, 27);
+                    sheet.SetRowHeight(i, 15);
                 }
 
                 for (int i = 0; i < family.people.Count; i++)
@@ -120,12 +121,12 @@ namespace MySpireOffice2
 
                 sheet.SetRowHeight(1, 69);
                 sheet.SetColumnWidth(1, 4.71);
-                sheet.SetColumnWidth(2, 14.71);
-                sheet.SetColumnWidth(3, 13.71);
-                sheet.SetColumnWidth(4, 11.14);
-                sheet.SetColumnWidth(5, 10.71);
-                sheet.SetColumnWidth(6, 14.71);
-                sheet.SetColumnWidth(7, 25);
+                sheet.SetColumnWidth(2, 12.86);
+                sheet.SetColumnWidth(3, 11.86);
+                sheet.SetColumnWidth(4, 6.71);
+                sheet.SetColumnWidth(5, 7.29);
+                sheet.SetColumnWidth(6, 15.29);
+                sheet.SetColumnWidth(7, 22.29);
 
                 sheet.Range["A2:A" + sheet.LastRow].Style.WrapText = true;
 
@@ -223,7 +224,7 @@ namespace MySpireOffice2
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "户口性质变动情况";
 
-                    string hukouxingzhibiandong = "       年  月  日 因                          转为非农业";
+                    string hukouxingzhibiandong = "       年  月  日 因                    转为非农业";
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = hukouxingzhibiandong;
 
@@ -231,7 +232,7 @@ namespace MySpireOffice2
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "户籍地变动情况";
 
-                    string hujidibiandongqingkuang = "       年  月  日 因        迁出（入）至";
+                    string hujidibiandongqingkuang = "       年  月  日 因      迁出（入）至";
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = hujidibiandongqingkuang;
 
@@ -239,7 +240,7 @@ namespace MySpireOffice2
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Merge();
                     sheet.Range[string.Format("A{0}:B{1}", row, row)].Text = "成员身份认定情况";
 
-                    string chengyuanshenfenrendingqingkuang = "  2019年  1月 30日 被认定为      国庆村  集体经济组织成员";
+                    string chengyuanshenfenrendingqingkuang = "  2019年  1月 30日 被认定为    国庆村  集体经济组织成员";
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Merge();
                     sheet.Range[string.Format("C{0}:H{1}", row, row)].Text = chengyuanshenfenrendingqingkuang;
 
@@ -283,7 +284,7 @@ namespace MySpireOffice2
                 for (int i = 0; i < family.people.Count; i++)
                 {
                     int start = (i * itemRowCount) + 3;
-                    int end = start + 11;
+                    int end = start + 9;
                     sheet.Range[string.Format("A{0}:H{1}", start, end)].BorderInside(LineStyleType.Thin, ExcelColors.Black);
                     sheet.Range[string.Format("A{0}:H{1}", start, end)].BorderAround(LineStyleType.Medium, ExcelColors.Black);
                 }
@@ -294,8 +295,8 @@ namespace MySpireOffice2
                 sheet.SetColumnWidth(4, 6);
                 sheet.SetColumnWidth(5, 13);
                 sheet.SetColumnWidth(6, 7);
-                sheet.SetColumnWidth(7, 14);
-                sheet.SetColumnWidth(8, 21);
+                sheet.SetColumnWidth(7, 13);
+                sheet.SetColumnWidth(8, 14.86);
 
                 sheet.Range["A2:A" + sheet.LastRow].Style.WrapText = true;
 
@@ -317,6 +318,7 @@ namespace MySpireOffice2
                 workbook.LoadFromFile(this.openFileDialog1.FileName);
 
                 Worksheet sheet = workbook.Worksheets[0];
+                this.inputSymRight = sheet.Range["A1"].Text;
                 this.symbolSquareRight = sheet.Range["A2"].Text;
                 this.symbolSquareError = sheet.Range["B2"].Text;
                 this.symbolSquareNull = sheet.Range["C2"].Text;
@@ -576,6 +578,108 @@ namespace MySpireOffice2
 
             public string phone;
 
+        }
+
+        private void btnLoad人口登记表_Click(object sender, EventArgs e)
+        {
+            this.openFileDialog1.Filter = "xlsx文件|*.xlsx";
+            if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                this.txt人口登记表路径.Text = this.openFileDialog1.FileName;
+                this.Load人口登记表(this.openFileDialog1.FileName);
+            }
+        }
+
+        private void Load人口登记表(string filePath)
+        {
+            this.lastHostName = "";
+            this.dicFamilies.Clear();
+
+            Workbook workbook = new Workbook();
+            workbook.LoadFromFile(filePath);
+
+            Worksheet sheet = workbook.Worksheets[0];
+
+            Family family = null;
+
+            string hostName = "";
+            for (int r = sheet.FirstRow + 2; r <= sheet.LastRow; r++)
+            {
+                if (string.IsNullOrEmpty(sheet[r, 3].Value.Trim()))
+                {
+                    break;
+                }
+                string hostNo = sheet[r, 1].Value.Trim().Trim('\'');
+                hostName = sheet[r, 2].Value.Trim();
+                string liveState = sheet[r, 14].Value.Trim();
+                if (liveState == "死亡" || liveState == "")
+                {
+                    continue;
+                }
+                if (sheet[r, 5].Value.Trim() == "")
+                {
+                    continue;
+                }
+
+                //if (hostNo.Length > 5)
+                //{
+                //    hostNoPrefix = hostNo.Substring(0, hostNo.Length - 5);
+                //}
+                //else if (!string.IsNullOrEmpty(hostNo))
+                //{
+                //    hostNo = hostNoPrefix + hostNo;
+                //}
+
+                if (this.lastHostName != hostName)
+                {
+                    if (this.dicFamilies.ContainsKey(hostName))
+                    {
+                        family = this.dicFamilies[hostName];
+                    }
+                    else
+                    {
+                        family = new Family()
+                        {
+                            hostNo = hostNo,
+                            hostHostName = hostName
+                        };
+
+                        this.dicFamilies.Add(hostName, family);
+                    }
+
+                    this.lastHostName = hostName;
+                }
+
+                string idNumber = sheet[r, 5].Value.Trim().Trim('\'').Substring(0, 18);
+                Person p = new Person()
+                {
+                    hostNo = hostNo,
+                    hostName = hostName,
+                    name = sheet[r, 3].Value.Trim(),
+                    relation = sheet[r, 4].Value.Trim(),
+                    idNo = idNumber,
+                    birthday = new DateTime(int.Parse(idNumber.Substring(6, 4)), int.Parse(idNumber.Substring(10, 2)), int.Parse(idNumber.Substring(12, 2))),
+                    sex = sheet[r, 7].Value.Trim(),
+                    huY_renY = sheet[r, 8].Value.Trim(),
+                    huY_renN = sheet[r, 9].Value.Trim(),
+                    huN_renY = sheet[r, 10].Value.Trim(),
+                    huN_renN = sheet[r, 11].Value.Trim(),
+                    group = sheet[r, 12].Value.Trim(),
+                    isTuDiChengbao = sheet[r, 13].Value.Trim(),
+                    lifeState = liveState,
+                    marryState = sheet[r, 15].Value.Trim(),
+                    phone = sheet[r, 16].Value.Trim(),
+                    nation = sheet[r, 18].Value.Trim(),
+                    location = "",
+                    education = sheet[r, 19].Value.Trim(),
+                    job = "粮农"
+                };
+                p.isHost = p.hostName == p.name;
+
+                family.people.Add(p);
+
+            }
+            MessageBox.Show("导入成功！");
         }
     }
 }
