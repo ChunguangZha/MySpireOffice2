@@ -57,7 +57,7 @@ namespace MySpireOffice2
                     }
                     F f = new F()
                     {
-                        HostName = pName,
+                        HostName = hostName,
                         HostSex = pSex,
                         HostID = hostid,
                         StockNo = stockNo
@@ -86,7 +86,7 @@ namespace MySpireOffice2
                         string id = sheet[r + offset, 14].Value.Trim();
                         if (id.Length > 18)
                         {
-                            id = hostid.Substring(0, 18);
+                            id = id.Substring(0, 18);
                         }
 
                         P p1 = new P()
@@ -107,8 +107,17 @@ namespace MySpireOffice2
                             if (f.People.FirstOrDefault(item => item.Relation == "配偶") != null)
                             {
                                 Console.WriteLine(p1.Name + "  两媳妇!");
+                                MessageBox.Show(p1.Name + "  两媳妇!");
                             }
                         }
+                        if (p1.Relation == "户主")
+                        {
+                            if (f.People.FirstOrDefault(item => item.Relation == "户主") != null)
+                            {
+                                Console.WriteLine(p1.Name + "  两户主!");
+                            }
+                        }
+                        
                         f.People.Add(p1);
                         f.PersonCount++;
                         f.FStock += p1.CountStock;
@@ -130,40 +139,54 @@ namespace MySpireOffice2
             Workbook book = new Workbook();
             Worksheet sheet = book.Worksheets[0];
             sheet.Name = "股权证工作表";
+            int row = 1;
 
-            for (int row = 1; row < fs.Count + 1; )
+            CellStyle cellStyle = sheet.GetDefaultRowStyle(1);
+            cellStyle.Font.Size = 12;
+            cellStyle.Font.FontName = "宋体";
+
+            for (int i = 0; i < fs.Count; i++)
             {
-                F f = fs[row - 1];
+                F f = fs[i];
 
                 int endRow = row + f.PersonCount - 1;
                 sheet.Range[string.Format("A{0}:A{1}", row, endRow)].Merge();
                 sheet.Range[string.Format("A{0}:A{1}", row, endRow)].Text = "讷河市";
                 sheet.Range[string.Format("D{0}", row)].Text = f.StockNo;
-                sheet.Range[string.Format("F{0}", row)].Text = f.HostName;
+                if (f.HostName == f.People[0].Name)
+                {
+                    sheet.Range[string.Format("F{0}", row)].Text = f.HostName;
+                }
+                else
+                {
+                    sheet.Range[string.Format("F{0}", row)].Text = f.People[0].Name;
+                    f.People[0].Relation = "户主";
+                    sheet.Range[string.Format("F{0}", row)].Style.Color = Color.Red;
+                }
                 sheet.Range[string.Format("G{0}", row)].Text = f.HostSex;
                 sheet.Range[string.Format("H{0}", row)].Text = f.Nation;
                 sheet.Range[string.Format("I{0}", row)].Text = f.HostID;
-                sheet.Range[string.Format("J{0}", row)].Text = f.PersonCount.ToString();
+                sheet.Range[string.Format("J{0}", row)].Value = f.PersonCount.ToString();
                 sheet.Range[string.Format("V{0}:V{1}", row, endRow)].Merge();
-                sheet.Range[string.Format("V{0}:V{1}", row, endRow)].Text = f.FStock.ToString();
+                sheet.Range[string.Format("V{0}", row)].Value = f.FStock.ToString("0.00");
                 sheet.Range[string.Format("W{0}:W{1}", row, endRow)].Merge();
-                sheet.Range[string.Format("W{0}:W{1}", row, endRow)].Text = f.FMoney.ToString();
+                sheet.Range[string.Format("W{0}", row)].Value = f.FMoney.ToString("0.00");
 
-                for (int i = 0; i < f.People.Count; i++)
+                for (int j = 0; j < f.People.Count; j++)
                 {
-                    P p = f.People[i];
+                    P p = f.People[j];
 
                     sheet.Range[string.Format("B{0}", row)].Text = "龙河镇";
                     sheet.Range[string.Format("C{0}", row)].Text = "讷河市龙河镇国庆村股份经济合作社";
                     sheet.Range[string.Format("K{0}", row)].Text = p.Name;
                     sheet.Range[string.Format("L{0}", row)].Text = p.Sex;
-                    sheet.Range[string.Format("M{0}", row)].Text = p.Age.ToString();
+                    sheet.Range[string.Format("M{0}", row)].Value = p.Age.ToString();
                     sheet.Range[string.Format("N{0}", row)].Text = p.Relation;
                     sheet.Range[string.Format("O{0}", row)].Text = p.IDNo;
-                    sheet.Range[string.Format("P{0}", row)].Text = p.MemeberStock.ToString();
-                    sheet.Range[string.Format("Q{0}", row)].Text = p.AgeStock.ToString();
-                    sheet.Range[string.Format("T{0}", row)].Text = p.CountStock.ToString();
-                    sheet.Range[string.Format("U{0}", row)].Text = p.PMoney.ToString();
+                    sheet.Range[string.Format("P{0}", row)].Value = p.MemeberStock.ToString();
+                    sheet.Range[string.Format("Q{0}", row)].Value = p.AgeStock.ToString();
+                    sheet.Range[string.Format("T{0}", row)].Value = p.CountStock.ToString();
+                    sheet.Range[string.Format("U{0}", row)].Value = p.PMoney.ToString();
 
                     row++;
                 }
