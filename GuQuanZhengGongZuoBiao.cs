@@ -117,6 +117,15 @@ namespace MySpireOffice2
                                 Console.WriteLine(p1.Name + "  两户主!");
                             }
                         }
+
+                        foreach (var item in this.fs)
+                        {
+                            P existP = item.People.Find(p => p.IDNo == p1.IDNo);
+                            if (existP != null)
+                            {
+                                Console.WriteLine("重复身份证号：" + existP.Name + " -- " + existP.IDNo + "   " + p1.Name + " -- " + p1.IDNo);
+                            }
+                        }
                         
                         f.People.Add(p1);
                         f.PersonCount++;
